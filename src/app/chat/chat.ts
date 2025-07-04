@@ -85,6 +85,7 @@ export class ChatComponent {
           }
           this.messages.push({ role: 'bot', text: botText });
           this.isLoading = false;
+		  this.cdr.detectChanges();
         },
         error: (err) => {
           this.messages.push({
@@ -92,6 +93,7 @@ export class ChatComponent {
             text: '[에러] 답변을 받아오지 못했습니다.',
           });
           this.isLoading = false;
+		  this.cdr.detectChanges();
         },
       });
   }
@@ -119,14 +121,13 @@ export class ChatComponent {
         const transcript = event.results[0][0].transcript;
         this.inputText = transcript;
         this.isListening = false;
-        console.log('onresult: isListening =', this.isListening);
         this.cdr.detectChanges();
+        console.log('Request: ', transcript);
       });
     };
     this.recognition.onerror = (event: any) => {
       this.ngZone.run(() => {
         this.isListening = false;
-        console.log('onerror: isListening =', this.isListening);
         this.cdr.detectChanges();
         alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
       });
@@ -134,11 +135,10 @@ export class ChatComponent {
     this.recognition.onend = () => {
       this.ngZone.run(() => {
         this.isListening = false;
-        console.log('onend: isListening =', this.isListening);
-        this.cdr.detectChanges();
         if (this.inputText.trim()) {
           this.sendMessage();
         }
+        this.cdr.detectChanges();
       });
     };
     this.recognition.start();
