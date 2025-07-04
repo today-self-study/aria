@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -30,7 +30,7 @@ export class ChatComponent {
   isLoading: boolean = false;
   recognition: any = null;
 
-  constructor(private http: HttpClient, private ngZone: NgZone) {}
+  constructor(private http: HttpClient) {}
 
   sendMessage() {
     if (!this.inputText.trim() || this.isLoading) return;
@@ -68,26 +68,26 @@ export class ChatComponent {
 
     this.isListening = true;
 
-    this.recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      this.ngZone.run(() => {
-        console.log('[onresult] 인식된 텍스트:', transcript);
-        this.inputText = transcript;
-        this.isListening = false;
-      });
-    };
-    this.recognition.onerror = (event: any) => {
-      this.ngZone.run(() => {
-        this.isListening = false;
-        alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
-      });
-    };
-    this.recognition.onend = () => {
-      this.ngZone.run(() => {
-        this.isListening = false;
-        console.log('[onend] 음성 인식 종료');
-      });
-    };
+    this.recognition.onresult = this.handleResult;
+    this.recognition.onerror = this.handleError;
+    this.recognition.onend = this.handleEnd;
     this.recognition.start();
   }
+
+  handleResult = (event: any) => {
+    const transcript = event.results[0][0].transcript;
+    console.log('[onresult] 인식된 텍스트:', transcript);
+    this.inputText = transcript;
+    this.isListening = false;
+  };
+
+  handleError = (event: any) => {
+    this.isListening = false;
+    alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
+  };
+
+  handleEnd = () => {
+    this.isListening = false;
+    console.log('[onend] 음성 인식 종료');
+  };
 }
