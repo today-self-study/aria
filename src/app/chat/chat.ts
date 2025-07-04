@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -31,7 +31,7 @@ export class ChatComponent {
   recognition: any = null;
   sessionId: string = '';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private ngZone: NgZone) {
     // 브라우저 환경에서만 localStorage 사용
     if (typeof window !== 'undefined' && window.localStorage) {
       const storedId = localStorage.getItem('sessionId');
@@ -111,20 +111,26 @@ export class ChatComponent {
     this.recognition.maxAlternatives = 1;
 
     this.recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      console.log('[onresult] 인식된 텍스트:', transcript);
-      this.inputText = transcript;
-      this.isListening = false;
+      this.ngZone.run(() => {
+        const transcript = event.results[0][0].transcript;
+        console.log('[onresult] 인식된 텍스트:', transcript);
+        this.inputText = transcript;
+        this.isListening = false;
+      });
     };
     this.recognition.onerror = (event: any) => {
-      this.isListening = false;
-      alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
+      this.ngZone.run(() => {
+        this.isListening = false;
+        alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
+      });
     };
     this.recognition.onend = () => {
-      this.isListening = false;
-      if (this.inputText.trim()) {
-        this.sendMessage();
-      }
+      this.ngZone.run(() => {
+        this.isListening = false;
+        if (this.inputText.trim()) {
+          this.sendMessage();
+        }
+      });
     };
     this.recognition.start();
   }
