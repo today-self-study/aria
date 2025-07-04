@@ -337,21 +337,5 @@
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<!-- 심플 채팅 UI 및 음성 입력 버튼 -->
-<div class="chat-container">
-  <div class="chat-messages" #chatMessages>
-    <div *ngFor="let msg of messages" [ngClass]="{'user': msg.role === 'user', 'bot': msg.role === 'bot'}" class="chat-message">
-      <span>{{ msg.text }}</span>
-    </div>
-  </div>
-  <div class="chat-input-area">
-    <button class="mic-btn" (click)="startVoiceInput()" [disabled]="isListening || isLoading">
-      <span *ngIf="!isListening">🎤</span>
-      <span *ngIf="isListening">⏺️</span>
-    </button>
-    <span class="voice-status" *ngIf="isListening">음성 인식 중...</span>
-    <span class="voice-status" *ngIf="isLoading">API 응답 대기 중...</span>
-  </div>
-</div>
 
-
+<router-outlet />
