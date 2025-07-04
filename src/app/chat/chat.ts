@@ -1,7 +1,8 @@
-import { Component, NgZone, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef, ViewChild, ElementRef, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 // Web Speech API 타입 선언 (window에 SpeechRecognition 추가)
 declare global {
@@ -14,6 +15,13 @@ declare global {
 interface ChatMessage {
   role: 'user' | 'bot';
   text: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class ChatStateService {
+  private _isListening = new BehaviorSubject<boolean>(false);
+  isListening$ = this._isListening.asObservable();
+  setListening(val: boolean) { this._isListening.next(val); }
 }
 
 @Component({
@@ -35,7 +43,8 @@ export class ChatComponent {
   constructor(
     private http: HttpClient,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private chatState: ChatStateService
   ) {
     // 브라우저 환경에서만 localStorage 사용
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -50,6 +59,9 @@ export class ChatComponent {
       // SSR 등 브라우저가 아닌 환경에서는 메모리에서만 관리
       this.sessionId = this.generateSessionId();
     }
+    this.chatState.isListening$.subscribe(val => {
+      this.isListening = val;
+    });
   }
 
   // 간단한 UUID 생성 함수
@@ -104,7 +116,7 @@ export class ChatComponent {
 
   startVoiceInput() {
     if (this.isListening) return;
-    this.isListening = true;
+    this.chatState.setListening(true);
     console.log('[startVoiceInput] 음성 인식 시작');
 
     const SpeechRecognition =
@@ -124,7 +136,7 @@ export class ChatComponent {
       this.ngZone.run(() => {
         const transcript = event.results[0][0].transcript;
         this.inputText = transcript;
-        this.isListening = false;
+        this.chatState.setListening(false);
         this.cdr.detectChanges();
         this.scrollToBottom();
         console.log('Request: ', transcript);
@@ -132,14 +144,14 @@ export class ChatComponent {
     };
     this.recognition.onerror = (event: any) => {
       this.ngZone.run(() => {
-        this.isListening = false;
+        this.chatState.setListening(false);
         this.cdr.detectChanges();
         alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
       });
     };
     this.recognition.onend = () => {
       this.ngZone.run(() => {
-        this.isListening = false;
+        this.chatState.setListening(false);
         if (this.inputText.trim()) {
           this.sendMessage();
         }
