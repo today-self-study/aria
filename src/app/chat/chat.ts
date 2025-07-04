@@ -75,6 +75,10 @@ export class ChatComponent {
     };
     this.recognition.onerror = (event: any) => {
       this.isListening = false;
+      if (event.error === 'aborted') {
+        // 사용자가 취소한 경우: 경고 없이 상태만 복구
+        return;
+      }
       alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
     };
     this.recognition.onend = () => {
