@@ -14,4 +14,5 @@
     </button>
     <button (click)="sendMessage()" [disabled]="!inputText.trim() || isListening || isLoading">전송</button>
   </div>
+  <div *ngIf="isListening" class="voice-indicator">음성 인식 중...</div>
 </div>
