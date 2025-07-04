@@ -49,8 +49,9 @@ export class ChatComponent {
 
   // 간단한 UUID 생성 함수
   generateSessionId(): string {
-    return 'xxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return 'xxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   }
@@ -70,8 +71,14 @@ export class ChatComponent {
       .subscribe({
         next: (res: any) => {
           // 응답이 객체이거나 문자열일 수 있으므로 분기 처리
-          const botText =
-            typeof res === 'string' ? res : res.text || '[응답 없음]';
+          let botText = '[응답 없음]';
+          if (typeof res === 'string') {
+            botText = res;
+          } else if (res.result) {
+            botText = res.result;
+          } else if (res.text) {
+            botText = res.text;
+          }
           this.messages.push({ role: 'bot', text: botText });
           this.isLoading = false;
         },
@@ -87,6 +94,9 @@ export class ChatComponent {
 
   startVoiceInput() {
     if (this.isListening) return;
+    this.isListening = true;
+    console.log('[startVoiceInput] 음성 인식 시작');
+
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
