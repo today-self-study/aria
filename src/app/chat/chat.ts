@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 // Web Speech API 타입 선언 (window에 SpeechRecognition 추가)
 declare global {
@@ -18,7 +19,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './chat.html',
   styleUrls: ['./chat.css']
 })
@@ -26,13 +27,31 @@ export class ChatComponent {
   messages: ChatMessage[] = [];
   inputText: string = '';
   isListening: boolean = false;
+  isLoading: boolean = false;
   recognition: any = null;
 
+  constructor(private http: HttpClient) {}
+
   sendMessage() {
-    if (!this.inputText.trim()) return;
-    this.messages.push({ role: 'user', text: this.inputText });
-    // TODO: API 호출 및 응답 처리
+    if (!this.inputText.trim() || this.isLoading) return;
+    const userText = this.inputText;
+    this.messages.push({ role: 'user', text: userText });
     this.inputText = '';
+    this.isLoading = true;
+
+    this.http.post<{text: string} | string>('http://dev.sillasol.com:5678/webhook/aria', { text: userText })
+      .subscribe({
+        next: (res: any) => {
+          // 응답이 객체이거나 문자열일 수 있으므로 분기 처리
+          const botText = typeof res === 'string' ? res : (res.text || '[응답 없음]');
+          this.messages.push({ role: 'bot', text: botText });
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.messages.push({ role: 'bot', text: '[에러] 답변을 받아오지 못했습니다.' });
+          this.isLoading = false;
+        }
+      });
   }
 
   startVoiceInput() {
