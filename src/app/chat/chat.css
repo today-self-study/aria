@@ -88,6 +88,8 @@
 }
 
 .input-row button {
+  display: block;
+  width: 100%;
   background: #1976d2;
   color: #fff;
   border: none;
@@ -96,8 +98,6 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: background 0.2s;
-  display: flex;
-  align-items: center;
 }
 
 .input-row button[disabled] {

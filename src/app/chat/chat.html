@@ -8,11 +8,10 @@
     </div>
   </div>
   <div class="input-row">
-    <input type="text" [(ngModel)]="inputText" (keyup.enter)="sendMessage()" placeholder="메시지를 입력하세요..." [disabled]="isListening || isLoading" />
-    <button (click)="startVoiceInput()" [disabled]="isListening || isLoading" title="음성 입력">
+    <!-- <input type="text" [(ngModel)]="inputText" (keyup.enter)="sendMessage()" placeholder="메시지를 입력하세요..." [disabled]="isListening || isLoading" /> -->
+    <button (click)="startVoiceInput()" [disabled]="isListening || isLoading" title="음성 입력" style="width: 100%;">
       🎤
     </button>
-    <button (click)="sendMessage()" [disabled]="!inputText.trim() || isListening || isLoading">전송</button>
   </div>
   <div *ngIf="isListening" class="voice-indicator">음성 인식 중...</div>
 </div>
