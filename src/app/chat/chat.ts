@@ -21,7 +21,7 @@ interface ChatMessage {
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './chat.html',
-  styleUrls: ['./chat.css']
+  styleUrls: ['./chat.css'],
 })
 export class ChatComponent {
   messages: ChatMessage[] = [];
@@ -39,26 +39,37 @@ export class ChatComponent {
     this.inputText = '';
     this.isLoading = true;
 
-    this.http.post<{text: string} | string>('http://dev.sillasol.com:5678/webhook/aria', { text: userText })
+    this.http
+      .post<{ text: string } | string>(
+        'http://dev.sillasol.com:5678/webhook/aria',
+        { text: userText }
+      )
       .subscribe({
         next: (res: any) => {
           // 응답이 객체이거나 문자열일 수 있으므로 분기 처리
-          const botText = typeof res === 'string' ? res : (res.text || '[응답 없음]');
+          const botText =
+            typeof res === 'string' ? res : res.text || '[응답 없음]';
           this.messages.push({ role: 'bot', text: botText });
           this.isLoading = false;
         },
         error: (err) => {
-          this.messages.push({ role: 'bot', text: '[에러] 답변을 받아오지 못했습니다.' });
+          this.messages.push({
+            role: 'bot',
+            text: '[에러] 답변을 받아오지 못했습니다.',
+          });
           this.isLoading = false;
-        }
+        },
       });
   }
 
   startVoiceInput() {
     if (this.isListening) return;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert('이 브라우저는 음성 인식을 지원하지 않습니다. Chrome 최신 버전을 권장합니다.');
+      alert(
+        '이 브라우저는 음성 인식을 지원하지 않습니다. Chrome 최신 버전을 권장합니다.'
+      );
       return;
     }
     this.recognition = new SpeechRecognition();
@@ -66,28 +77,23 @@ export class ChatComponent {
     this.recognition.interimResults = false;
     this.recognition.maxAlternatives = 1;
 
-    this.isListening = true;
-
-    this.recognition.onresult = this.handleResult;
-    this.recognition.onerror = this.handleError;
-    this.recognition.onend = this.handleEnd;
+    const parent = this;
+    this.recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      console.log('[onresult] 인식된 텍스트:', transcript);
+      parent.inputText = transcript;
+      parent.isListening = false;
+    };
+    this.recognition.onerror = (event: any) => {
+      parent.isListening = false;
+      alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
+    };
+    this.recognition.onend = () => {
+      parent.isListening = false;
+      if (parent.inputText.trim()) {
+        parent.sendMessage();
+      }
+    };
     this.recognition.start();
   }
-
-  handleResult = (event: any) => {
-    const transcript = event.results[0][0].transcript;
-    console.log('[onresult] 인식된 텍스트:', transcript);
-    this.inputText = transcript;
-    this.isListening = false;
-  };
-
-  handleError = (event: any) => {
-    this.isListening = false;
-    alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
-  };
-
-  handleEnd = () => {
-    this.isListening = false;
-    console.log('[onend] 음성 인식 종료');
-  };
 }
