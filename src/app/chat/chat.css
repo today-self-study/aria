@@ -26,6 +26,26 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  /* 심플하고 세련된 스크롤바 */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #b0c4de transparent; /* Firefox */
+  box-sizing: border-box;
+}
+.messages::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+.messages::-webkit-scrollbar-thumb {
+  background: #b0c4de;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.messages::-webkit-scrollbar-thumb:hover {
+  background: #90a4c4;
+}
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+  background-clip: padding-box;
 }
 
 .message-bubble {
