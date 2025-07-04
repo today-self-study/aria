@@ -32,13 +32,18 @@ export class ChatComponent {
   sessionId: string = '';
 
   constructor(private http: HttpClient) {
-    // sessionId를 localStorage에서 불러오거나 새로 생성
-    const storedId = localStorage.getItem('sessionId');
-    if (storedId) {
-      this.sessionId = storedId;
+    // 브라우저 환경에서만 localStorage 사용
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedId = localStorage.getItem('sessionId');
+      if (storedId) {
+        this.sessionId = storedId;
+      } else {
+        this.sessionId = this.generateSessionId();
+        localStorage.setItem('sessionId', this.sessionId);
+      }
     } else {
+      // SSR 등 브라우저가 아닌 환경에서는 메모리에서만 관리
       this.sessionId = this.generateSessionId();
-      localStorage.setItem('sessionId', this.sessionId);
     }
   }
 
