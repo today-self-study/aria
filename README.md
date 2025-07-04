@@ -83,3 +83,7 @@ For more information on using the Angular CLI, including detailed command refere
   - .chat-card의 width: 100vw → width: 100%로 변경
   - .chat-card, .messages, .input-row에 box-sizing: border-box 명확히 지정
   - html, body에 box-sizing: border-box, overflow-x: hidden 추가
+
+## 2024-06-09 입력란 하단 여백(UI) 개선
+- 입력란과 녹음 버튼 하단에 padding을 추가하여 UI가 더 여유롭고 보기 좋게 개선하였습니다.
+  - .input-row의 padding-bottom을 데스크탑(18px), 모바일(20px)로 조정
