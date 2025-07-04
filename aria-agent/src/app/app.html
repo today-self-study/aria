@@ -345,11 +345,12 @@
     </div>
   </div>
   <div class="chat-input-area">
-    <button class="mic-btn" (click)="startVoiceInput()" [disabled]="isListening">
+    <button class="mic-btn" (click)="startVoiceInput()" [disabled]="isListening || isLoading">
       <span *ngIf="!isListening">🎤</span>
       <span *ngIf="isListening">⏺️</span>
     </button>
     <span class="voice-status" *ngIf="isListening">음성 인식 중...</span>
+    <span class="voice-status" *ngIf="isLoading">API 응답 대기 중...</span>
   </div>
 </div>
 
