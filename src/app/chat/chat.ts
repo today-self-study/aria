@@ -82,4 +82,11 @@ export class ChatComponent {
     };
     this.recognition.start();
   }
+
+  cancelVoiceInput() {
+    if (this.isListening && this.recognition) {
+      this.recognition.abort();
+      this.isListening = false;
+    }
+  }
 }

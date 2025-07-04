@@ -12,6 +12,7 @@
     <button (click)="startVoiceInput()" [disabled]="isListening || isLoading" title="음성 입력">
       🎤
     </button>
+    <button *ngIf="isListening" (click)="cancelVoiceInput()" class="cancel-btn" type="button">취소</button>
     <button (click)="sendMessage()" [disabled]="!inputText.trim() || isListening || isLoading">전송</button>
   </div>
 </div>
