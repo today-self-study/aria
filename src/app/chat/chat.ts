@@ -110,21 +110,20 @@ export class ChatComponent {
     this.recognition.interimResults = false;
     this.recognition.maxAlternatives = 1;
 
-    const parent = this;
     this.recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       console.log('[onresult] 인식된 텍스트:', transcript);
-      parent.inputText = transcript;
-      parent.isListening = false;
+      this.inputText = transcript;
+      this.isListening = false;
     };
     this.recognition.onerror = (event: any) => {
-      parent.isListening = false;
+      this.isListening = false;
       alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
     };
     this.recognition.onend = () => {
-      parent.isListening = false;
-      if (parent.inputText.trim()) {
-        parent.sendMessage();
+      this.isListening = false;
+      if (this.inputText.trim()) {
+        this.sendMessage();
       }
     };
     this.recognition.start();
