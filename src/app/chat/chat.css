@@ -161,13 +161,28 @@ html, body {
     box-sizing: border-box;
   }
   .input-row {
-    position: static;
-    width: 100%;
-    max-width: 100vw;
-    flex-shrink: 0;
+    box-sizing: border-box;
     padding: 8px 4vw calc(8px + env(safe-area-inset-bottom, 0)) 4vw;
-    background: linear-gradient(135deg, #f8fafc 0%, #e3e9f6 100%);
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.04);
-    z-index: 10;
+    display: flex;
+    gap: 6px;
+  }
+  .input-row input[type="text"] {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-right: 0;
+  }
+  .input-row .voice-btn {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .input-row .voice-btn svg {
+    width: 24px;
+    height: 24px;
   }
 }
