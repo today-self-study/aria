@@ -1,4 +1,4 @@
-import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -24,6 +24,7 @@ interface ChatMessage {
   styleUrls: ['./chat.css'],
 })
 export class ChatComponent {
+  @ViewChild('chatContainer') chatContainer!: ElementRef;
   messages: ChatMessage[] = [];
   inputText: string = '';
   isListening: boolean = false;
@@ -66,6 +67,7 @@ export class ChatComponent {
     this.messages.push({ role: 'user', text: userText });
     this.inputText = '';
     this.isLoading = true;
+    this.scrollToBottom();
 
     this.http
       .post<{ text: string } | string>(
@@ -85,7 +87,8 @@ export class ChatComponent {
           }
           this.messages.push({ role: 'bot', text: botText });
           this.isLoading = false;
-		  this.cdr.detectChanges();
+          this.cdr.detectChanges();
+          this.scrollToBottom();
         },
         error: (err) => {
           this.messages.push({
@@ -93,7 +96,8 @@ export class ChatComponent {
             text: '[에러] 답변을 받아오지 못했습니다.',
           });
           this.isLoading = false;
-		  this.cdr.detectChanges();
+          this.cdr.detectChanges();
+          this.scrollToBottom();
         },
       });
   }
@@ -122,6 +126,7 @@ export class ChatComponent {
         this.inputText = transcript;
         this.isListening = false;
         this.cdr.detectChanges();
+        this.scrollToBottom();
         console.log('Request: ', transcript);
       });
     };
@@ -142,5 +147,13 @@ export class ChatComponent {
       });
     };
     this.recognition.start();
+  }
+
+  scrollToBottom() {
+    if (typeof window !== 'undefined' && this.chatContainer && this.chatContainer.nativeElement) {
+      setTimeout(() => {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      }, 0);
+    }
   }
 }

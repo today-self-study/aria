@@ -1,5 +1,5 @@
 <div class="chat-card">
-  <div class="messages">
+  <div class="messages" #chatContainer>
     <div *ngFor="let msg of messages" [ngClass]="{'user': msg.role === 'user', 'bot': msg.role === 'bot'}" class="message-bubble">
       <span class="sender" *ngIf="msg.role === 'bot'">🤖</span>
       <span class="sender" *ngIf="msg.role === 'user'">🧑</span>

@@ -72,3 +72,6 @@ For more information on using the Angular CLI, including detailed command refere
 - chat.css 스타일을 세련되고 현대적으로 리디자인
   - 컬러, 여백, 그림자, 애니메이션, 반응형 등 적용
 - 기존 주석/불필요 코드 정리
+
+## 변경 사항 (2024-06-10)
+- 채팅 메시지가 추가될 때마다 채팅창이 자동으로 맨 아래로 스크롤됩니다.
