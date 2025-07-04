@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 interface ChatMessage {
   role: 'user' | 'bot';
@@ -8,7 +7,7 @@ interface ChatMessage {
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -17,6 +16,7 @@ export class App {
   isListening = false;
   isLoading = false;
 
+  // 음성 입력 버튼 클릭 시 호출
   async startVoiceInput() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('이 브라우저는 음성 인식을 지원하지 않습니다. 크롬 등 최신 브라우저를 사용해 주세요.');
@@ -65,4 +65,4 @@ export class App {
       this.isLoading = false;
     }
   }
-} 
+}
