@@ -61,3 +61,4 @@ For more information on using the Angular CLI, including detailed command refere
 ## 변경 사항 (2024-06-09)
 - chat 컴포넌트에서 음성 인식(마이크) 종료 시, 인식된 텍스트가 있으면 자동으로 메시지가 전송됩니다.
   - 사용자는 음성 입력 후 별도의 전송 버튼을 누르지 않아도 됩니다.
+- 이제 모든 API 호출에 sessionId가 자동으로 포함됩니다. sessionId는 최초 1회 생성되어 localStorage에 저장되며, 새로고침해도 유지됩니다.
