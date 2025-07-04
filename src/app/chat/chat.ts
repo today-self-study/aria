@@ -70,6 +70,7 @@ export class ChatComponent {
 
     this.recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
+      console.log('[onresult] 인식된 텍스트:', transcript);
       this.inputText = transcript;
       this.isListening = false;
     };
@@ -89,6 +90,7 @@ export class ChatComponent {
 
   cancelVoiceInput() {
     if (this.isListening && this.recognition) {
+      console.log('[cancelVoiceInput] 취소 버튼 클릭, 현재 inputText:', this.inputText);
       this.recognition.abort();
       this.isListening = false;
     }
