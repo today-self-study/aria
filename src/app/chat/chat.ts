@@ -87,12 +87,4 @@ export class ChatComponent {
     };
     this.recognition.start();
   }
-
-  cancelVoiceInput() {
-    if (this.isListening && this.recognition) {
-      console.log('[cancelVoiceInput] 취소 버튼 클릭, 현재 inputText:', this.inputText);
-      this.recognition.abort();
-      this.isListening = false;
-    }
-  }
 }
