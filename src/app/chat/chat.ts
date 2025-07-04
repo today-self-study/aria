@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -31,7 +31,11 @@ export class ChatComponent {
   recognition: any = null;
   sessionId: string = '';
 
-  constructor(private http: HttpClient, private ngZone: NgZone) {
+  constructor(
+    private http: HttpClient,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
     // 브라우저 환경에서만 localStorage 사용
     if (typeof window !== 'undefined' && window.localStorage) {
       const storedId = localStorage.getItem('sessionId');
@@ -113,20 +117,25 @@ export class ChatComponent {
     this.recognition.onresult = (event: any) => {
       this.ngZone.run(() => {
         const transcript = event.results[0][0].transcript;
-        console.log('[onresult] 인식된 텍스트:', transcript);
         this.inputText = transcript;
         this.isListening = false;
+        console.log('onresult: isListening =', this.isListening);
+        this.cdr.detectChanges();
       });
     };
     this.recognition.onerror = (event: any) => {
       this.ngZone.run(() => {
         this.isListening = false;
+        console.log('onerror: isListening =', this.isListening);
+        this.cdr.detectChanges();
         alert('음성 인식 중 오류가 발생했습니다: ' + event.error);
       });
     };
     this.recognition.onend = () => {
       this.ngZone.run(() => {
         this.isListening = false;
+        console.log('onend: isListening =', this.isListening);
+        this.cdr.detectChanges();
         if (this.inputText.trim()) {
           this.sendMessage();
         }
