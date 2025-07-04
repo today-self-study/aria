@@ -29,8 +29,26 @@ export class ChatComponent {
   isListening: boolean = false;
   isLoading: boolean = false;
   recognition: any = null;
+  sessionId: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // sessionId를 localStorage에서 불러오거나 새로 생성
+    const storedId = localStorage.getItem('sessionId');
+    if (storedId) {
+      this.sessionId = storedId;
+    } else {
+      this.sessionId = this.generateSessionId();
+      localStorage.setItem('sessionId', this.sessionId);
+    }
+  }
+
+  // 간단한 UUID 생성 함수
+  generateSessionId(): string {
+    return 'xxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
 
   sendMessage() {
     if (!this.inputText.trim() || this.isLoading) return;
@@ -42,7 +60,7 @@ export class ChatComponent {
     this.http
       .post<{ text: string } | string>(
         'http://dev.sillasol.com:5678/webhook/aria',
-        { text: userText }
+        { text: userText, sessionId: this.sessionId }
       )
       .subscribe({
         next: (res: any) => {
