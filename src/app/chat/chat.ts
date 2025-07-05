@@ -83,7 +83,7 @@ export class ChatComponent {
 
     this.http
       .post<{ text: string } | string>(
-        'http://dev.sillasol.com:5678/webhook/aria',
+        'https://n8n.sillasol.com/webhook/aria',
         { text: userText, sessionId: this.sessionId }
       )
       .subscribe({
