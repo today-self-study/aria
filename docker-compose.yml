@@ -1,5 +1,7 @@
 services:
   aria:
+    hostname: aria
+    container_name: aria
     build:
       context: .
     image: steve0314/aria
