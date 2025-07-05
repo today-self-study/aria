@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href /aria/",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postbuild": "powershell -Command \"Copy-Item -Path .\\docs\\browser\\* -Destination .\\docs\\ -Recurse -Force; Remove-Item -Path .\\docs\\browser -Recurse -Force\""
   },
   "prettier": {
     "overrides": [
