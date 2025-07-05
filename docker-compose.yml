@@ -2,7 +2,6 @@ services:
   aria:
     build:
       context: .
-      dockerfile: Dockerfile
     image: steve0314/aria
     restart: always
     networks:
