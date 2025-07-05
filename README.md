@@ -1,89 +1,59 @@
 # Aria
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.5.
+AI 챗봇 및 음성 인식 기능을 제공하는 Angular 기반의 현대적 웹 애플리케이션입니다.
 
-## Development server
+## 주요 특징
+- **AI 챗봇**: 사용자와 자연스러운 대화가 가능한 챗봇 UI
+- **음성 입력 지원**: 마이크 버튼을 통한 음성 인식 및 자동 메시지 전송
+- **반응형 UI**: 데스크탑/모바일 모두 최적화된 카드형 디자인
+- **자동 스크롤**: 새 메시지 도착 시 채팅창 자동 스크롤
+- **세션 관리**: sessionId를 통한 사용자 세션 유지
+- **/docs 폴더 빌드**: 정적 배포(GitHub Pages 등) 최적화
 
-To start a local development server, run:
-
-```bash
-ng serve
+## 폴더 구조 (주요 파일)
+```
+aria/
+  ├─ src/
+  │   ├─ app/
+  │   │   ├─ chat/         # 챗봇 UI/로직
+  │   │   └─ ...
+  │   ├─ index.html
+  │   └─ ...
+  ├─ public/               # 정적 자원(favicon 등)
+  ├─ docs/                 # 빌드 결과물(정적 배포용)
+  ├─ angular.json          # Angular 프로젝트 설정
+  ├─ package.json          # 의존성 및 빌드/배포 스크립트
+  └─ README.md
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 개발 환경
+- Node.js 20.x 이상 권장
+- Angular 20.x
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+## 설치 및 개발 서버 실행
 ```bash
-ng generate component component-name
+npm install
+npm start
 ```
+- 브라우저에서 http://localhost:4200 접속
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+## 빌드 및 정적 배포
 ```bash
-ng generate --help
+npm run build
 ```
+- `/docs` 폴더에 정적 파일(index.html, js, css 등) 생성
+- **Angular 17+ 구조상 빌드 결과가 `/docs/browser`에 생성되며, 자동으로 `/docs`로 이동(postbuild 스크립트) 후 `/docs/browser`는 삭제됩니다.**
+- GitHub Pages 등에서 `/docs` 폴더를 루트로 지정해 배포 가능
 
-## Building
+## 주요 커스텀 방법
+- **챗봇 UI/로직**: `src/app/chat/` 내 파일 수정
+- **스타일**: `src/app/chat/chat.css` 및 `src/styles.css`에서 커스텀
+- **정적 자원**: `public/` 폴더에 favicon 등 추가
+- **환경 변수/API 연동**: Angular 환경 파일 또는 서비스에서 관리
 
-To build the project run:
+## 주의사항
+- Angular 17+ 이상에서만 정상 동작합니다.
+- 빌드/배포 구조(특히 /docs, postbuild 스크립트 등) 변경 시 README도 즉시 최신화해야 합니다.
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## 변경 사항 (2024-06-09)
-- chat 컴포넌트에서 음성 인식(마이크) 종료 시, 인식된 텍스트가 있으면 자동으로 메시지가 전송됩니다.
-  - 사용자는 음성 입력 후 별도의 전송 버튼을 누르지 않아도 됩니다.
-- 이제 모든 API 호출에 sessionId가 자동으로 포함됩니다. sessionId는 최초 1회 생성되어 localStorage에 저장되며, 새로고침해도 유지됩니다.
-
-## [2024-06-09] 채팅 UI/UX 리디자인
-
-- chat.html 구조를 현대적이고 심플하게 개선
-  - 메시지: 말풍선 형태, 사용자/봇 구분, 이모지 아이콘 추가
-  - 입력창: 텍스트 입력 + 음성 입력 버튼 병렬 배치
-  - 전체 컨테이너: 카드형, 그라데이션 배경, 그림자, 반응형
-- chat.css 스타일을 세련되고 현대적으로 리디자인
-  - 컬러, 여백, 그림자, 애니메이션, 반응형 등 적용
-- 기존 주석/불필요 코드 정리
-
-## 변경 사항 (2024-06-10)
-- 채팅 메시지가 추가될 때마다 채팅창이 자동으로 맨 아래로 스크롤됩니다.
-- 채팅 메시지 영역의 스크롤바를 심플하고 세련되게 커스텀함.
-- 채팅 메시지 영역 스크롤바가 컨테이너 모서리와 자연스럽게 어울리도록 개선.
-
-## 2024-06-09 모바일 모드 UI 수정
-- 모바일 환경에서 오른쪽에 세로 흰줄이 보이는 문제를 해결하기 위해 CSS(`src/app/chat/chat.css`)를 수정하였습니다.
-  - .chat-card의 width: 100vw → width: 100%로 변경
-  - .chat-card, .messages, .input-row에 box-sizing: border-box 명확히 지정
-  - html, body에 box-sizing: border-box, overflow-x: hidden 추가
-
-## 2024-06-09 입력란 하단 여백(UI) 개선
-- 입력란과 녹음 버튼 하단에 padding을 추가하여 UI가 더 여유롭고 보기 좋게 개선하였습니다.
-  - .input-row의 padding-bottom을 데스크탑(18px), 모바일(20px)로 조정
+## 라이선스
+MIT (또는 프로젝트 정책에 맞게 수정)
