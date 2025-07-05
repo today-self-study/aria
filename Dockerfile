@@ -16,5 +16,5 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 # 빌드 결과물 복사 (browser 폴더 내부만)
 COPY --from=build /app/target/browser /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8200
 CMD ["nginx", "-g", "daemon off;"] 
