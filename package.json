@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:aria": "node dist/aria/server/server.mjs"
+    "serve:ssr:aria": "node dist/aria/server/server.mjs",
+    "postbuild": "powershell -Command \"Copy-Item -Path .\\docs\\browser\\* -Destination .\\docs\\ -Recurse -Force; Remove-Item -Path .\\docs\\browser -Recurse -Force\""
   },
   "prettier": {
     "overrides": [
