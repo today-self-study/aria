@@ -8,8 +8,8 @@ services:
       - "8200:80"
     restart: unless-stopped 
     networks:
-      - shared-net
+      - sillasol-net
 
 networks:
-  shared-net:
+  sillasol-net:
     external: true
