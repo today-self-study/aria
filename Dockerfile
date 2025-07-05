@@ -8,10 +8,10 @@ COPY . .
 RUN npm run build
 
 # 2단계: nginx로 정적 서비스
-FROM nginx:alpine
+FROM nginx:stable-alpine
 
 # SPA 라우팅 지원: 404시 index.html로 fallback
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # 빌드 결과물 복사 (browser 폴더 내부만)
 COPY --from=build /app/target/browser /usr/share/nginx/html
