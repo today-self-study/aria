@@ -7,3 +7,9 @@ services:
     ports:
       - "8200:80"
     restart: unless-stopped 
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: true
