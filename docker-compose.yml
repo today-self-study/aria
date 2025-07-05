@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: aria-spa
-    ports:
-      - "8200:80"
     restart: unless-stopped 
     networks:
       - sillasol-net
