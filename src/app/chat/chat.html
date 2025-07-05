@@ -1,18 +1,24 @@
-<div class="chat-card">
-  <div class="messages" #chatContainer>
-    <div *ngFor="let msg of messages" [ngClass]="{'user': msg.role === 'user', 'bot': msg.role === 'bot'}" class="message-bubble">
-      <span class="sender" *ngIf="msg.role === 'bot'">🤖</span>
-      <span class="sender" *ngIf="msg.role === 'user'">🧑</span>
-      <span class="text">{{ msg.text }}</span>
+<div class="chat-mobile-bg">
+  <div class="chat-card">
+    <div class="chat-header">
+      <span class="chat-title">Aria</span>
     </div>
-    <div *ngIf="isLoading" class="message-bubble bot loading">
-      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <div class="messages" #chatContainer>
+      <div *ngFor="let msg of messages" [ngClass]="{'user': msg.role === 'user', 'bot': msg.role === 'bot'}" class="message-bubble">
+        <span class="text">{{ msg.text }}</span>
+      </div>
+      <div *ngIf="isLoading" class="message-bubble bot loading">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
     </div>
-  </div>
-  <div class="input-row">
-    <input type="text" [(ngModel)]="inputText" (keyup.enter)="sendMessage()" placeholder="메시지를 입력하세요..." [disabled]="isListening || isLoading" />
-    <button (click)="startVoiceInput()" [disabled]="isListening || isLoading" title="음성 입력" class="voice-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
-    </button>
+    <div class="input-row">
+      <input type="text" [(ngModel)]="inputText" (keyup.enter)="sendMessage()" placeholder="메시지를 입력하세요..." [disabled]="isListening || isLoading" />
+      <button (click)="sendMessage()" [disabled]="isListening || isLoading || !inputText" class="send-btn" title="전송">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+      <button (click)="startVoiceInput()" [disabled]="isListening || isLoading" title="음성 입력" class="voice-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+      </button>
+    </div>
   </div>
 </div>	
