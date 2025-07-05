@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: aria-spa
-    restart: unless-stopped 
+    image: steve0314/aria
+    restart: always
     networks:
       - sillasol-net
 
